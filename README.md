@@ -34,7 +34,7 @@ Os horários são apresentados de meia em meia hora, no fuso de Brasília. Datas
 
 ## Apresentar o site antes de lançar
 
-1. [Baixe os arquivos deste repositório](https://github.com/brusynbr/studio-estefani-bruschi-apresentacao/archive/refs/heads/main.zip).
+
 2. Extraia a pasta e abra `dist/index.html` no navegador.
 3. Para apresentar sem enviar mensagens, confira o pedido no modal de revisão. O envio só ocorre depois que a pessoa abre o WhatsApp e confirma a mensagem no aplicativo.
 
