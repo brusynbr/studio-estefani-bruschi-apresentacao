@@ -9,6 +9,15 @@
     {id:'limpeza-pele',name:'Limpeza de pele',category:'Pele',price:80,description:'Um momento de cuidado dedicado à sua pele.'},
     {id:'dermaplaning',name:'Dermaplaning',category:'Pele',price:null,description:'Consulte com o studio as condições e o valor deste cuidado.'}
   ];
+  const servicePhotos = {
+    'fox-eyes': {src:'assets/fox-eyes-detail.jpg',alt:'Resultado Fox Eyes publicado pelo Studio Estefani Bruschi',width:1200,height:1500,position:'50% 50%',caption:'Fox Eyes · trabalho do studio'},
+    'volume-eb': {src:'assets/studio-work-1.jpg',alt:'Referência de extensão de cílios do studio',width:856,height:856,position:'50% 48%',caption:'Referência de cílios do studio'},
+    'mega-charmoso': {src:'assets/studio-work-2.jpg',alt:'Detalhe do olhar de uma cliente do studio',width:900,height:1125,position:'50% 55%',caption:'Referência de cílios do studio'},
+    'charmoso': {src:'assets/studio-portrait-hd.jpg',alt:'Trabalho de extensão de cílios publicado pelo studio',width:1200,height:1500,position:'50% 60%',caption:'Referência de cílios do studio'},
+    'brasileiro': {src:'assets/studio-work-1.jpg',alt:'Referência de resultado de cílios em cliente do studio',width:856,height:856,position:'50% 48%',caption:'Referência de cílios do studio'},
+    'limpeza-pele': {src:'assets/limpeza-pele.png',alt:'Imagem ilustrativa de limpeza de pele profissional',width:1536,height:1024,position:'50% 50%',caption:'Imagem ilustrativa'},
+    'dermaplaning': {src:'assets/dermaplaning.png',alt:'Imagem ilustrativa de cuidado facial com dermaplaning',width:1536,height:1024,position:'50% 50%',caption:'Imagem ilustrativa'}
+  };
   const phone='5516992437184';
   const zone='America/Sao_Paulo';
   const money=n=>n===null?'A consultar':new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0}).format(n);
@@ -28,7 +37,32 @@
   function renderTimes(){const box=el('time-options');box.replaceChildren();if(!selectedDate){el('hours-note').textContent='Escolha um dia para ver os horários que pode solicitar.';return;}const [start,end]=hoursFor(selectedDate);el('hours-note').textContent='Atendimento neste dia: '+start+'h às '+end+'h. Horários sujeitos à confirmação.';const options=timesFor(selectedDate);if(selectedTime&&!options.includes(selectedTime))selectedTime='';if(!options.length){const p=document.createElement('p');p.className='no-hours';p.textContent='Os horários de hoje já passaram. Escolha outro dia para solicitar seu atendimento.';box.append(p);return;}for(const time of options){const button=document.createElement('button');button.type='button';button.className='time-button'+(time===selectedTime?' selected':'');button.textContent=time;button.dataset.time=time;button.setAttribute('aria-pressed',String(time===selectedTime));button.setAttribute('aria-label','Solicitar horário '+time);button.addEventListener('click',()=>{selectedTime=time;box.querySelectorAll('button').forEach(b=>{b.classList.toggle('selected',b===button);b.setAttribute('aria-pressed',String(b===button))});clearError();updateSummary();el('selection-status').textContent='Horário desejado: '+time+'.';});box.append(button);}}
   function chooseDate(date){if(!validDate(date)||date<nowLocal().date||!timesFor(date).length)throw new Error('Escolha uma data com horários futuros.');selectedDate=date;selectedTime='';clearError();renderCalendar();renderTimes();updateSummary();el('calendar-days').querySelector('[data-date="'+date+'"]')?.focus({preventScroll:true});el('selection-status').textContent='Dia desejado: '+formatDate(date)+'. Escolha agora o horário.';}
   el('previous-month').addEventListener('click',()=>{if(year===initial.year&&month===initial.month)return;month--;if(month<0){month=11;year--;}renderCalendar();});el('next-month').addEventListener('click',()=>{month++;if(month>11){month=0;year++;}renderCalendar();});el('service').addEventListener('change',()=>{clearError();updateSummary();});
-  function renderServices(category='Todos'){const box=el('service-cards');box.replaceChildren();for(const s of services.filter(s=>category==='Todos'||s.category===category)){const card=document.createElement('article');card.className='service-card';card.innerHTML='<span class="service-category"></span><h3></h3><p></p><div class="service-card-bottom"><strong class="service-price"></strong><button type="button">Escolher</button></div>';card.querySelector('.service-category').textContent=s.category;card.querySelector('h3').textContent=s.name;card.querySelector('p').textContent=s.description;card.querySelector('.service-price').textContent=money(s.price);const button=card.querySelector('button');button.dataset.service=s.id;button.setAttribute('aria-label','Escolher '+s.name);button.addEventListener('click',()=>{el('service').value=s.id;updateSummary();clearError();el('agenda').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});el('service').focus({preventScroll:true});});box.append(card);}}
+  function renderServices(category='Todos') {
+    const box=el('service-cards');
+    box.replaceChildren();
+    for(const service of services.filter(s=>category==='Todos'||s.category===category)) {
+      const photo=servicePhotos[service.id];
+      const card=document.createElement('article');
+      card.className='service-card';
+      const figure=document.createElement('figure');
+      figure.className='service-photo';
+      const image=document.createElement('img');
+      image.src=photo.src;image.alt=photo.alt;image.width=photo.width;image.height=photo.height;
+      image.loading='lazy';image.decoding='async';image.style.objectPosition=photo.position;
+      const caption=document.createElement('figcaption');caption.textContent=photo.caption;
+      figure.append(image,caption);
+      const content=document.createElement('div');content.className='service-card-content';
+      const categoryLabel=document.createElement('span');categoryLabel.className='service-category';categoryLabel.textContent=service.category;
+      const title=document.createElement('h3');title.textContent=service.name;
+      const description=document.createElement('p');description.textContent=service.description;
+      const bottom=document.createElement('div');bottom.className='service-card-bottom';
+      const price=document.createElement('strong');price.className='service-price';price.textContent=money(service.price);
+      const button=document.createElement('button');button.type='button';button.textContent='Escolher';button.dataset.service=service.id;
+      button.setAttribute('aria-label','Escolher '+service.name);
+      button.addEventListener('click',()=>{el('service').value=service.id;updateSummary();clearError();el('agenda').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});el('service').focus({preventScroll:true});});
+      bottom.append(price,button);content.append(categoryLabel,title,description,bottom);card.append(figure,content);box.append(card);
+    }
+  }
   document.querySelectorAll('[data-category]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-category]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderServices(b.dataset.category);}));
   function fail(message,focus){el('form-error').textContent=message;el('form-error').hidden=false;focus?.focus();return false;}
   function getRequest(){const s=selectedService();if(!s)throw new Error('Escolha o serviço que deseja solicitar.');if(!validDate(selectedDate)||selectedDate<nowLocal().date)throw new Error('Escolha um dia futuro no calendário.');if(!selectedTime||!timesFor(selectedDate).includes(selectedTime))throw new Error('Escolha um horário válido para o dia selecionado.');const name=el('customer-name').value.trim();if(name.length<2||name.length>80)throw new Error('Digite seu nome para continuar.');const notes=el('notes').value.trim();return {service:s,name,date:selectedDate,time:selectedTime,notes};}

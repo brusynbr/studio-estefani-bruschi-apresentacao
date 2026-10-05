@@ -2,6 +2,8 @@
 
 Site de apresentação desenvolvido pela **Brusyn**, com catálogo de serviços e solicitação de atendimento pelo WhatsApp.
 
+Identidade em rosa e dourado, conforme a referência da marca, fotos originais de cílios em resolução maior e uma imagem em cada cartão de serviço. As imagens dos cuidados com a pele são ilustrativas e estão identificadas.
+
 **Status: versão para apresentação e revisão antes do lançamento.** O repositório contém o site completo; esta entrega não ativa GitHub Pages nem publica o site em um domínio.
 
 ![Página inicial do Studio Estefani Bruschi](docs/apresentacao-desktop.jpg)
@@ -25,6 +27,8 @@ O horário selecionado é uma **solicitação**, sujeita à confirmação da equ
 | Domingo | 09h às 12h |
 
 Os horários são apresentados de meia em meia hora, no fuso de Brasília. Datas e horários passados ficam indisponíveis. A duração de cada serviço e a disponibilidade real serão confirmadas pelo studio.
+
+![Serviços com fotos e identidade rosa e dourada](docs/apresentacao-servicos.jpg)
 
 ![Calendário e solicitação de horário](docs/apresentacao-agenda.jpg)
 
